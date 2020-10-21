@@ -1,0 +1,94 @@
+Sub Bersih_Text()
+    TxtRegistrasi = ""
+    TxtNama = ""
+    CboJurusan = ""
+    CboJekel = ""
+    TxtAlamat = ""
+    TxtTelepon = ""
+    TxtEmail = ""
+End Sub
+
+Sub Listbox()
+With ListBox1
+    .RowSource = Sheet1.Range("DATA").Address(External:=True)
+    .ColumnCount = 7
+    .ColumnHeads = True
+    .ColumnWidths = "70pt; 120pt; 50pt; 70pt; 0pt"
+End With
+End Sub
+
+Private Sub BtnEdit_Click()
+Pesan = MsgBox("Data dengan nomor " & TxtRegistrasi & " akan diedit ?", _
+vbYesNo, "Edit data!")
+If Pesan = vbYes Then
+    Dim eRow As Object
+    Set eRow = Sheet1.Range("A2:A100000").Find(What:=Me.TxtRegistrasi, _
+    LookIn:=xlValues)
+       eRow.Offset(0, 1).Value = TxtNama.Value
+       eRow.Offset(0, 2).Value = CboJurusan.Value
+       eRow.Offset(0, 3).Value = CboJekel.Value
+       eRow.Offset(0, 4).Value = TxtAlamat.Value
+       eRow.Offset(0, 5).Value = TxtTelepon.Value
+       eRow.Offset(0, 6).Value = TxtEmail.Value
+       
+       Call UserForm_Initialize
+       MsgBox "Data berhasil diupdate", vbInformation, "Update Data!"
+Else
+    Call UserForm_Initialize
+End If
+End Sub
+
+Private Sub BtnKeluar_Click()
+Unload Me
+End Sub
+
+Private Sub BtnSimpan_Click()
+Dim Simpan As Object
+Set Simpan = Sheet1.Range("A10000").End(xlUp)
+    Simpan.Offset(1, 0).Value = TxtRegistrasi.Value
+    Simpan.Offset(1, 1).Value = TxtNama.Value
+    Simpan.Offset(1, 2).Value = CboJurusan.Value
+    Simpan.Offset(1, 3).Value = CboJekel.Value
+    Simpan.Offset(1, 4).Value = TxtAlamat.Value
+    Simpan.Offset(1, 5).Value = TxtTelepon.Value
+    Simpan.Offset(1, 6).Value = TxtEmail.Value
+    
+    Call Bersih_Text
+    Call Listbox
+    MsgBox "Data berhasil disimpan!", vbInformation, "2020"
+    
+End Sub
+
+Private Sub ListBox1_DblClick(ByVal Cancel As MSForms.ReturnBoolean)
+TxtRegistrasi.Value = Me.ListBox1.List(Me.ListBox1.ListIndex, 0)
+TxtNama.Value = Me.ListBox1.List(Me.ListBox1.ListIndex, 1)
+CboJurusan.Value = Me.ListBox1.List(Me.ListBox1.ListIndex, 2)
+CboJekel.Value = Me.ListBox1.List(Me.ListBox1.ListIndex, 3)
+TxtAlamat.Value = Me.ListBox1.List(Me.ListBox1.ListIndex, 4)
+TxtTelepon.Value = Me.ListBox1.List(Me.ListBox1.ListIndex, 5)
+TxtEmail.Value = Me.ListBox1.List(Me.ListBox1.ListIndex, 6)
+End Sub
+
+Private Sub UserForm_Initialize()
+Call Bersih_Text
+Call Listbox
+Call Nomor_Registrasi
+
+With CboJurusan
+    .Clear
+    .AddItem "ADP"
+    .AddItem "AKP"
+    .AddItem "ITS"
+    .AddItem "MIK"
+End With
+
+With CboJekel
+    .Clear
+    .AddItem "Laki-laki"
+    .AddItem "Perempuan"
+End With
+End Sub
+
+Sub Nomor_Registrasi()
+TxtRegistrasi.Value = "REG000" & Sheet1.Range("I2").Value + 1
+End Sub
