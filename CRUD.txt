@@ -1,0 +1,62 @@
+Private Sub BtnCari_Click()
+On Error GoTo Salah
+Sheet1.Range("A3").CurrentRegion.AdvancedFilter Action:=xlFilterCopy, _
+CriteriaRange:=Sheet1.Range("Kriteria"), _
+CopyToRange:=Sheet1.Range("Hasil_Filter"), Unique:=False
+ListBox1.RowSource = Sheet1.Range("Data_Filter").Address(External:=True)
+Exit Sub
+Salah:
+MsgBox "Data Tidak Ditemukan!", vbCritical, "CRUD"
+End Sub
+
+Private Sub BtnKeluar_Click()
+Unload Me
+End Sub
+
+Private Sub BtnTambah_Click()
+Form_Produk.Show
+End Sub
+
+Private Sub CmbCari_Change()
+Sheet1.Range("H5").Value = CmbCari.Value
+End Sub
+
+Private Sub ListBox1_DblClick(ByVal Cancel As MSForms.ReturnBoolean)
+Form_Produk.TxtKode.Value = Me.ListBox1.List(Me.ListBox1.ListIndex, 0)
+Form_Produk.TxtNama.Value = Me.ListBox1.List(Me.ListBox1.ListIndex, 1)
+Form_Produk.CmbKategori.Value = Me.ListBox1.List(Me.ListBox1.ListIndex, 2)
+Form_Produk.TxtHrgBeli.Value = Me.ListBox1.List(Me.ListBox1.ListIndex, 3)
+Form_Produk.TxtHrgJual.Value = Me.ListBox1.List(Me.ListBox1.ListIndex, 4)
+Form_Produk.TxtStok.Value = Me.ListBox1.List(Me.ListBox1.ListIndex, 5)
+Form_Produk.Show
+End Sub
+
+Private Sub TxtCari_Change()
+Sheet1.Range("H6").Value = TxtCari.Value
+End Sub
+
+Private Sub TxtCari2_Change()
+On Error GoTo Salah
+Sheet1.Range("H5").Value = CmbCari.Value
+Sheet1.Range("H6").Value = TxtCari2.Value
+Sheet1.Range("A3").CurrentRegion.AdvancedFilter Action:=xlFilterCopy, _
+CriteriaRange:=Sheet1.Range("Kriteria"), _
+CopyToRange:=Sheet1.Range("Hasil_Filter"), Unique:=False
+ListBox1.RowSource = Sheet1.Range("Data_Filter").Address(External:=True)
+Exit Sub
+Salah:
+MsgBox "Data Tidak Ditemukan!", vbCritical, "CRUD"
+End Sub
+
+Private Sub UserForm_Initialize()
+With ListBox1
+    .ColumnHeads = True
+    .ColumnCount = 6
+    .RowSource = Sheet1.Range("Data_Produk").Address(External:=True)
+End With
+With CmbCari
+    .Clear
+    .AddItem "Kategori"
+    .AddItem "Nama Produk"
+End With
+End Sub
