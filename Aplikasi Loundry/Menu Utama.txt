@@ -1,0 +1,31 @@
+Private Sub BtnTambah_Click()
+FormPakaian.Show
+End Sub
+
+Private Sub Label_Dashboard_Click()
+MultiPage1.Value = 0
+End Sub
+
+Private Sub Label_Data_Pakaian_Click()
+MultiPage1.Value = 1
+End Sub
+
+Private Sub Label_Data_Pelanggan_Click()
+MultiPage1.Value = 2
+End Sub
+
+Private Sub Label_Transaksi_Click()
+MultiPage1.Value = 3
+End Sub
+
+Private Sub ListBox_Pakaian_DblClick(ByVal Cancel As MSForms.ReturnBoolean)
+FormPakaian.TxtIDPakaian = ListBox_Pakaian.List(Me.ListBox_Pakaian.ListIndex, 0)
+FormPakaian.TxtNamaPakaian = ListBox_Pakaian.List(Me.ListBox_Pakaian.ListIndex, 1)
+FormPakaian.TxtJenis = ListBox_Pakaian.List(Me.ListBox_Pakaian.ListIndex, 2)
+FormPakaian.TxtHarga = ListBox_Pakaian.List(Me.ListBox_Pakaian.ListIndex, 3)
+FormPakaian.Show
+End Sub
+
+Private Sub UserForm_Initialize()
+Call Listbox_Data
+End Sub
