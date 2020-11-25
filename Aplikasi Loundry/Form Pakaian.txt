@@ -5,6 +5,8 @@ TxtJenis = ""
 TxtHarga = ""
 
 TxtIDPakaian.Locked = True
+BtnTutup.Caption = "Tutup"
+BtnTutup.Enabled = True
 End Sub
 
 Sub No_Otomatis()
@@ -17,13 +19,12 @@ Else
 End If
 End Sub
 
-Private Sub BtnTutup_Click()
-Unload Me
-End Sub
-
 Private Sub UserForm_Initialize()
 Call Bersih_Text
 Call No_Otomatis
+If Sheet1.Range("F4").Value = "" Then
+    Sheet1.Range("F4").Value = 0
+End If
 End Sub
 
 Private Sub BtnSimpan_Click()
@@ -37,4 +38,51 @@ Set Simpan = Sheet1.Range("A10000").End(xlUp)
 MsgBox "Data berhasil disimpan!", vbInformation, "Aplikasi Loundry"
 Call UserForm_Initialize
 Call Listbox_Data
+Sheet1.Range("F4").Value = Sheet1.Range("F4").Value + 1
+End Sub
+
+Private Sub BtnEdit_Click()
+Pesan = MsgBox("Data akan diupdate ?", vbQuestion + vbYesNo, "Aplikasi Loundry")
+If Pesan = vbYes Then
+    Dim eRow As Object
+        Set eRow = Sheet1.Range("A4:A100000").Find(What:=Me.TxtIDPakaian, _
+        LookIn:=xlValues)
+        
+        eRow.Offset(0, 1).Value = TxtNamaPakaian.Value
+        eRow.Offset(0, 2).Value = TxtJenis.Value
+        eRow.Offset(0, 3).Value = TxtHarga.Value
+        
+        Call UserForm_Initialize
+        MsgBox "Data berhasil diupdate!", vbInformation, "Aplikasi Loundry"
+Else
+    Unload Me
+End If
+End Sub
+
+Private Sub BtnHapus_Click()
+Pesan = MsgBox("Data akan dihapus ?", vbQuestion + vbYesNo, "Aplikasi Loundry")
+If Pesan = vbYes Then
+    Set Hapus = Sheet1.Range("A4:A100000").Find(What:=Me.TxtIDPakaian, _
+      LookIn:=xlValues)
+      Hapus.Value = ""
+      Hapus.Offset(0, 1).Value = ""
+      Hapus.Offset(0, 2).Value = ""
+      Hapus.Offset(0, 3).Value = ""
+      Hapus.Offset(0, 4).Value = ""
+      Sheet1.Range("HAPUS_PAKAIAN").Sort Key1:=("HAPUS_PAKAIAN"), _
+      ORDER1:=xlAscending, Header:=xlNo
+      Call UserForm_Initialize
+      MsgBox "Data berhasil dihapus!", vbInformation, "Aplikasi Loundry"
+Else
+    Unload Me
+End If
+End Sub
+
+Private Sub BtnTutup_Click()
+If BtnTutup.Caption = "Tutup" Then
+    Unload Me
+Else
+    BtnSimpan.Enabled = True
+    Call UserForm_Initialize
+End If
 End Sub

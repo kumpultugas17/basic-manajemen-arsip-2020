@@ -23,6 +23,8 @@ FormPakaian.TxtIDPakaian = ListBox_Pakaian.List(Me.ListBox_Pakaian.ListIndex, 0)
 FormPakaian.TxtNamaPakaian = ListBox_Pakaian.List(Me.ListBox_Pakaian.ListIndex, 1)
 FormPakaian.TxtJenis = ListBox_Pakaian.List(Me.ListBox_Pakaian.ListIndex, 2)
 FormPakaian.TxtHarga = ListBox_Pakaian.List(Me.ListBox_Pakaian.ListIndex, 3)
+FormPakaian.BtnSimpan.Enabled = False
+FormPakaian.BtnTutup.Caption = "Batal"
 FormPakaian.Show
 End Sub
 

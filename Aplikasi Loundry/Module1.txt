@@ -1,0 +1,9 @@
+Sub Listbox_Data()
+On Error Resume Next
+With MenuUtama.ListBox_Pakaian
+    .RowSource = Sheet1.Range("DATA_PAKAIAN").Address(External:=True)
+    .ColumnHeads = True
+    .ColumnCount = 4
+    .ColumnWidths = "100pt;200pt;250pt;100pt"
+End With
+End Sub
