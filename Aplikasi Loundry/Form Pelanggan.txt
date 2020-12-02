@@ -1,0 +1,38 @@
+Sub Kondisi_Awal()
+Call Bersih
+BtnSimpan.Caption = "Simpan"
+BtnTutup.Caption = "Tutup"
+End Sub
+
+Sub Bersih()
+TxtIDPelanggan = ""
+TxtNama = ""
+TxtTelepon = ""
+TxtAlamat = ""
+End Sub
+
+Private Sub BtnHapus_Click()
+
+End Sub
+
+Private Sub BtnSimpan_Click()
+    Select Case BtnSimpan.Caption
+        Case "Simpan"
+            'Coding Simpan
+        Case Else
+            'Coding Edit
+    End Select
+End Sub
+
+Private Sub BtnTutup_Click()
+    Select Case BtnTutup.Caption
+        Case "Batal"
+            Call Kondisi_Awal
+        Case Else
+            Unload Me
+    End Select
+End Sub
+
+Private Sub UserForm_Initialize()
+Call Kondisi_Awal
+End Sub
