@@ -1,21 +1,21 @@
 Sub Bersih_Text()
-TxtIDPakaian = ""
+TxtIdPakaian = ""
 TxtNamaPakaian = ""
 TxtJenis = ""
 TxtHarga = ""
 
-TxtIDPakaian.Locked = True
+TxtIdPakaian.Locked = True
 BtnTutup.Caption = "Tutup"
 BtnTutup.Enabled = True
 End Sub
 
 Sub No_Otomatis()
 If Sheet1.Range("F4") < 9 Then
-   TxtIDPakaian.Value = "P-00" & Sheet1.Range("F4") + 1
+   TxtIdPakaian.Value = "P-00" & Sheet1.Range("F4") + 1
 ElseIf Sheet1.Range("F4") >= 9 And Sheet1.Range("F4") < 99 Then
-   TxtIDPakaian.Value = "P-0" & Sheet1.Range("F4") + 1
+   TxtIdPakaian.Value = "P-0" & Sheet1.Range("F4") + 1
 Else
-   TxtIDPakaian.Value = "P-" & Sheet1.Range("F4") + 1
+   TxtIdPakaian.Value = "P-" & Sheet1.Range("F4") + 1
 End If
 End Sub
 
@@ -30,7 +30,7 @@ End Sub
 Private Sub BtnSimpan_Click()
 Dim Simpan As Object
 Set Simpan = Sheet1.Range("A10000").End(xlUp)
-    Simpan.Offset(1, 0).Value = TxtIDPakaian.Value
+    Simpan.Offset(1, 0).Value = TxtIdPakaian.Value
     Simpan.Offset(1, 1).Value = TxtNamaPakaian.Value
     Simpan.Offset(1, 2).Value = TxtJenis.Value
     Simpan.Offset(1, 3).Value = TxtHarga.Value
@@ -45,7 +45,7 @@ Private Sub BtnEdit_Click()
 Pesan = MsgBox("Data akan diupdate ?", vbQuestion + vbYesNo, "Aplikasi Loundry")
 If Pesan = vbYes Then
     Dim eRow As Object
-        Set eRow = Sheet1.Range("A4:A100000").Find(What:=Me.TxtIDPakaian, _
+        Set eRow = Sheet1.Range("A4:A100000").Find(What:=Me.TxtIdPakaian, _
         LookIn:=xlValues)
         
         eRow.Offset(0, 1).Value = TxtNamaPakaian.Value
@@ -62,7 +62,7 @@ End Sub
 Private Sub BtnHapus_Click()
 Pesan = MsgBox("Data akan dihapus ?", vbQuestion + vbYesNo, "Aplikasi Loundry")
 If Pesan = vbYes Then
-    Set Hapus = Sheet1.Range("A4:A100000").Find(What:=Me.TxtIDPakaian, _
+    Set Hapus = Sheet1.Range("A4:A100000").Find(What:=Me.TxtIdPakaian, _
       LookIn:=xlValues)
       Hapus.Value = ""
       Hapus.Offset(0, 1).Value = ""

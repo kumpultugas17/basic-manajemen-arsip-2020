@@ -1,0 +1,27 @@
+Private Sub BtnLogin_Click()
+Dim Cari As Object
+On Error GoTo Salah
+Set Cari = Sheet5.Range("B4:B100000").Find(What:=TxtUsername.Value, _
+LookIn:=xlValues)
+    If TxtPassword.Value = Cari.Offset(0, 1).Value Then
+        Unload Me
+        MenuUtama.Label_Data_Pakaian.Visible = True
+        MenuUtama.Label_Data_Pelanggan.Visible = True
+        MenuUtama.Label_Transaksi.Visible = True
+        MenuUtama.LabelNama.Visible = True
+        MenuUtama.LabelLogin.Caption = "LOGOUT"
+        MenuUtama.LabelNama.Caption = Cari.Offset(0, 2).Value
+    End If
+Exit Sub
+Salah:
+MsgBox "Username dan Password salah", vbCritical, "Aplikasi!"
+End Sub
+
+Sub Bersih()
+TxtUsername = ""
+TxtPassword = ""
+End Sub
+
+Private Sub UserForm_Initialize()
+Call Bersih
+End Sub

@@ -1,0 +1,79 @@
+Dim kode As String
+
+Sub Bersih()
+TxtKode.Value = ""
+TxtUsername.Value = ""
+TxtPassword.Value = ""
+TxtNamaLengkap.Value = ""
+CboLevel.Value = ""
+TxtKonfirmasi.Value = ""
+End Sub
+
+Private Sub BtnHapus_Click()
+Pesan = MsgBox("Data akan dihapus ?", vbQuestion + vbYesNo, "Aplikasi Loundry")
+If Pesan = vbYes Then
+    Set Hapus = Sheet5.Range("A4:A100000").Find(What:=Me.TxtKode, _
+      LookIn:=xlValues)
+      Hapus.Value = ""
+      Hapus.Offset(0, 1).Value = ""
+      Hapus.Offset(0, 2).Value = ""
+      Hapus.Offset(0, 3).Value = ""
+      Hapus.Offset(0, 4).Value = ""
+      Hapus.Offset(0, 5).Value = ""
+      'Sheet1.Range("HAPUS_ADMIN").Sort Key1:=("HAPUS_ADMIN"), _
+      ORDER1:=xlAscending, Header:=xlNo
+      Call UserForm_Initialize
+      MsgBox "Data berhasil dihapus!", vbInformation, "Aplikasi Loundry"
+Else
+    Unload Me
+End If
+End Sub
+
+Private Sub BtnSimpan_Click()
+If TxtPassword.Value = TxtKonfirmasi.Value Then
+    Dim Simpan As Object
+    Set Simpan = Sheet5.Range("A10000").End(xlUp)
+        Simpan.Offset(1, 0).Value = TxtKode.Value
+        Simpan.Offset(1, 1).Value = TxtUsername.Value
+        Simpan.Offset(1, 2).Value = TxtPassword.Value
+        Simpan.Offset(1, 3).Value = TxtNamaLengkap.Value
+        Simpan.Offset(1, 4).Value = CboLevel.Value
+    MsgBox "Data berhasil disimpan!", vbInformation, "Aplikasi Loundry"
+    Call Bersih
+Else
+    MsgBox "Password dan Konfirmasi Password berbeda, silahkan ulangi !", vbCritical, "Aplikasi Loundry"
+    TxtPassword = ""
+    TxtKonfirmasi = ""
+End If
+End Sub
+
+Sub Level()
+With CboLevel
+    .Clear
+    .AddItem "User"
+    .AddItem "Admin"
+End With
+End Sub
+
+Sub Otomatis()
+If Sheet5.Range("G4").Value >= 9 Then
+    TxtKode.Value = kode & Sheet5.Range("G4").Value + 1
+Else
+    TxtKode.Value = kode & "0" & Sheet5.Range("G4").Value + 1
+End If
+End Sub
+
+Private Sub CboLevel_Click()
+Select Case CboLevel.Value
+    Case "User"
+        kode = "USR"
+    Case Else
+        kode = "ADM"
+End Select
+Call Otomatis
+End Sub
+
+Private Sub UserForm_Initialize()
+Call Bersih
+Call Level
+End Sub

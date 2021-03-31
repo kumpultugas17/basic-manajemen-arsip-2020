@@ -5,7 +5,7 @@ BtnTutup.Caption = "Tutup"
 End Sub
 
 Sub Bersih()
-TxtIDPelanggan = ""
+TxtIdPelanggan = ""
 TxtNama = ""
 TxtTelepon = ""
 TxtAlamat = ""

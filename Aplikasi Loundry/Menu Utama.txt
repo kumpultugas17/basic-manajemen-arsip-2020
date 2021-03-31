@@ -1,9 +1,100 @@
-Private Sub BtnTambah_Click()
+Sub Bersih_Detail()
+    TxtIdPakaian.Value = ""
+    TxtNamaPakaian.Value = ""
+    TxtHarga.Value = ""
+    TxtBerat.Value = ""
+    TxtTotal.Value = ""
+End Sub
+
+Private Sub BtnProses_Click()
+Dim Simpan As Object
+Set Simpan = Sheet4.Range("A10000").End(xlUp)
+    Simpan.Offset(1, 0).Value = TxtIdTransaksi.Value
+    Simpan.Offset(1, 1).Value = TxtIdPakaian.Value
+    Simpan.Offset(1, 2).Value = TxtHarga.Value
+    Simpan.Offset(1, 3).Value = TxtBerat.Value
+    Simpan.Offset(1, 4).Value = TxtTotal.Value
+    Sheet4.Range("G4").Value = TxtIdTransaksi.Value
+    Call Cari_ID_Transaksi
+    Call Cari_ID_Transaksi_Nota
+    TxtGrandTotal.Value = Sheet4.Range("G7").Value
+    Call Bersih_Detail
+    Call ListBox_Transaksi_Detail
+End Sub
+
+Sub Cari_ID_Transaksi()
+On Error GoTo Salah
+Sheet4.Range("A3").CurrentRegion.AdvancedFilter Action:=xlFilterCopy, _
+CriteriaRange:=Sheet4.Range("G3:G4"), _
+CopyToRange:=Sheet4.Range("HASIL_CARI_ID"), Unique:=False
+Exit Sub
+Salah:
+MsgBox "Data Tidak Ditemukan!", vbCritical, "Aplikasi Loundry"
+End Sub
+
+Sub Cari_ID_Transaksi_Nota()
+On Error GoTo Salah
+Sheet4.Range("A3").CurrentRegion.AdvancedFilter Action:=xlFilterCopy, _
+CriteriaRange:=Sheet4.Range("G3:G4"), _
+CopyToRange:=Sheet4.Range("HASIL_CARI_ID_NOTA"), Unique:=False
+Exit Sub
+Salah:
+MsgBox "Data Tidak Ditemukan!", vbCritical, "Aplikasi Loundry"
+End Sub
+
+Sub Bersih_Transaksi()
+TxtIdPelanggan.Value = ""
+TxtNmPelanggan.Value = ""
+TxtLamaPengerjaan.Value = ""
+TxtTglSelesai.Value = ""
+TxtGrandTotal.Value = ""
+TxtDiskon.Value = ""
+TxtTotal.Value = ""
+TxtStatus.Value = ""
+End Sub
+
+Private Sub BtnSimpanT_Click()
+Dim Simpan As Object
+Set Simpan = Sheet3.Range("A10000").End(xlUp)
+    Simpan.Offset(1, 0).Value = TxtIdTransaksi.Value
+    Simpan.Offset(1, 1).Value = TxtIdPelanggan.Value
+    Simpan.Offset(1, 2).Value = TxtTglTransaksi.Value
+    Simpan.Offset(1, 3).Value = TxtTglSelesai.Value
+    Simpan.Offset(1, 4).Value = Total.Value
+    Simpan.Offset(1, 5).Value = TxtStatus.Value
+    Call ID_Transaksi_Otomatis
+    Call Bersih_Detail
+    Sheet4.Range("G4").Value = TxtIdTransaksi.Value
+    Call Cari_ID_Transaksi
+    Call ListBox_Transaksi_Detail
+    Call Bersih_Transaksi
+    Call Print_Nota
+    Sheet3.Range("H12").Value = TxtTglTransaksi.Value
+End Sub
+
+Sub Print_Nota()
+Set Sh = Range("Print_Area")
+    Me.Hide
+    Sh.PrintPreview
+    Me.Show
+End Sub
+
+Private Sub BtnTambahPakaian_Click()
 FormPakaian.Show
+End Sub
+
+Private Sub BtnTambahPelanggan_Click()
+FormPelanggan.Show
 End Sub
 
 Private Sub Label_Dashboard_Click()
 MultiPage1.Value = 0
+LabelJumlahTransaksi.Caption = Sheet3.Range("H4").Value
+LabelTotalPendapatan.Caption = Sheet3.Range("H10").Value
+LabelTotalPendapatan.Caption = Format(LabelTotalPendapatan, "Rp #,###")
+LabelTransaksiPerHari.Caption = Sheet3.Range("H13").Value
+LabelPendapatanPerhari.Caption = Sheet3.Range("H14").Value
+LabelPendapatanPerhari.Caption = Format(LabelPendapatanPerhari, "Rp #,###")
 End Sub
 
 Private Sub Label_Data_Pakaian_Click()
@@ -16,10 +107,25 @@ End Sub
 
 Private Sub Label_Transaksi_Click()
 MultiPage1.Value = 3
+Sheet6.Range("D5").Value = TxtIdTransaksi.Value
+End Sub
+
+Private Sub LabelLogin_Click()
+If LabelLogin.Caption = "LOGIN" Then
+    FormLogin.Show
+Else
+    Label_Data_Pakaian.Visible = False
+    Label_Data_Pelanggan.Visible = False
+    Label_Transaksi.Visible = False
+    LabelNama.Visible = False
+    
+    MultiPage1.Value = 0
+    LabelLogin.Caption = "LOGIN"
+End If
 End Sub
 
 Private Sub ListBox_Pakaian_DblClick(ByVal Cancel As MSForms.ReturnBoolean)
-FormPakaian.TxtIDPakaian = ListBox_Pakaian.List(Me.ListBox_Pakaian.ListIndex, 0)
+FormPakaian.TxtIdPakaian = ListBox_Pakaian.List(Me.ListBox_Pakaian.ListIndex, 0)
 FormPakaian.TxtNamaPakaian = ListBox_Pakaian.List(Me.ListBox_Pakaian.ListIndex, 1)
 FormPakaian.TxtJenis = ListBox_Pakaian.List(Me.ListBox_Pakaian.ListIndex, 2)
 FormPakaian.TxtHarga = ListBox_Pakaian.List(Me.ListBox_Pakaian.ListIndex, 3)
@@ -28,6 +134,99 @@ FormPakaian.BtnTutup.Caption = "Batal"
 FormPakaian.Show
 End Sub
 
+Private Sub ListBox_Pelanggan_DblClick(ByVal Cancel As MSForms.ReturnBoolean)
+FormPelanggan.TxtIdPelanggan = ListBox_Pelanggan.List(Me.ListBox_Pelanggan.ListIndex, 0)
+FormPelanggan.TxtNama = ListBox_Pelanggan.List(Me.ListBox_Pelanggan.ListIndex, 1)
+FormPelanggan.TxtTelepon = ListBox_Pelanggan.List(Me.ListBox_Pelanggan.ListIndex, 2)
+FormPelanggan.TxtAlamat = ListBox_Pelanggan.List(Me.ListBox_Pelanggan.ListIndex, 3)
+FormPelanggan.BtnSimpan.Caption = "Edit"
+FormPelanggan.BtnTutup.Caption = "Batal"
+FormPelanggan.Show
+End Sub
+
+Private Sub TxtBerat_Change()
+If TxtBerat.Value = "" Then
+    TxtTotal.Value = 0
+Else
+    TxtTotal.Value = Val(TxtBerat.Value) * Val(TxtHarga.Value)
+End If
+End Sub
+
+Private Sub TxtDiskon_Change()
+Total.Value = Val(TxtGrandTotal.Value) - Val(TxtDiskon.Value)
+Total.Locked = True
+End Sub
+
+Private Sub TxtIdPakaian_AfterUpdate()
+Dim Cari As Object
+On Error GoTo Salah
+'proses pencarian data
+Set Cari = Sheet1.Range("A4:A100000").Find(What:=TxtIdPakaian.Value, LookIn:=xlValues)
+    'untuk menampilkan data ke textbox
+    TxtNamaPakaian.Value = Cari.Offset(0, 1).Value
+    TxtHarga.Value = Cari.Offset(0, 3).Value
+    TxtNamaPakaian.Locked = True
+    TxtHarga.Locked = True
+Exit Sub
+Salah:
+MsgBox "ID Pakaian tidak ditemukan!", vbCritical, "Aplikasi!"
+TxtIdPakaian.Value = ""
+TxtIdPakaian.Locked = False
+End Sub
+
+Private Sub TxtIdPelanggan_AfterUpdate()
+Dim Cari As Object
+On Error GoTo Salah
+'proses pencarian data
+Set Cari = Sheet2.Range("A4:A100000").Find(What:=TxtIdPelanggan.Value, LookIn:=xlValues)
+    'untuk menampilkan data ke textbox
+    TxtNmPelanggan.Value = Cari.Offset(0, 1).Value
+    TxtIdPelanggan.Locked = True
+Exit Sub
+Salah:
+MsgBox "Pelanggan tidak ditemukan!", vbCritical, "Aplikasi!"
+TxtIdPelanggan.Value = ""
+TxtIdPelanggan.Locked = False
+End Sub
+
+Private Sub TxtLamaPengerjaan_Change()
+If TxtLamaPengerjaan.Value = "" Then
+    TxtTglSelesai.Value = 0
+Else
+    Sheet3.Range("H7").Value = TxtLamaPengerjaan.Value
+    TxtTglSelesai.Value = Format(Sheet3.Range("H8").Value, "dddd, dd mmmm yyyy")
+End If
+End Sub
+
+Sub Menu()
+Label_Data_Pakaian.Visible = False
+Label_Data_Pelanggan.Visible = False
+Label_Transaksi.Visible = False
+LabelJumlahTransaksi.Caption = Sheet3.Range("H4").Value
+LabelTotalPendapatan.Caption = Sheet3.Range("H10").Value
+LabelTotalPendapatan.Caption = Format(LabelTotalPendapatan, "Rp #,###")
+LabelTransaksiPerHari.Caption = Sheet3.Range("H13").Value
+LabelPendapatanPerhari.Caption = Sheet3.Range("H14").Value
+LabelPendapatanPerhari.Caption = Format(LabelPendapatanPerhari, "Rp #,###")
+
+MultiPage1.Value = 0
+End Sub
+
 Private Sub UserForm_Initialize()
 Call Listbox_Data
+Call Menu
+Call ID_Transaksi_Otomatis
+TxtTglTransaksi.Value = Format(Now, "dddd, dd mmmm yyyy")
+TxtTglTransaksi.Locked = True
+End Sub
+
+Sub ID_Transaksi_Otomatis()
+If Sheet3.Range("H4") < 9 Then
+   TxtIdTransaksi.Value = "LN" & Format(Now, "yymmdd") & "00" & Sheet3.Range("H4") + 1
+ElseIf Sheet3.Range("H4") >= 9 And Sheet3.Range("H4") < 99 Then
+   TxtIdTransaksi.Value = "LN" & Format(Now, "yymmdd") & "0" & Sheet3.Range("H4") + 1
+Else
+   TxtIdTransaksi.Value = "LN" & Format(Now, "yymmdd") & Sheet3.Range("H4") + 1
+End If
+TxtIdTransaksi.Locked = True
 End Sub
